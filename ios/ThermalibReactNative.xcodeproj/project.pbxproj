@@ -12,6 +12,9 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		501C06842D0C5C1A00E9B45A /* libThermaLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 501C06822D0C5C1A00E9B45A /* libThermaLib.a */; };
+		501C06852D0C5C1A00E9B45A /* libThermaLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 501C06822D0C5C1A00E9B45A /* libThermaLib.a */; };
+		62CD2A6CD6317C8B4EC24416 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		7699B88040F8A987B510C191 /* libPods-ThermalibReactNative-ThermalibReactNativeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-ThermalibReactNative-ThermalibReactNativeTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -39,6 +42,13 @@
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = ThermalibReactNative/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-ThermalibReactNative-ThermalibReactNativeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ThermalibReactNative-ThermalibReactNativeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-ThermalibReactNative.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ThermalibReactNative.debug.xcconfig"; path = "Target Support Files/Pods-ThermalibReactNative/Pods-ThermalibReactNative.debug.xcconfig"; sourceTree = "<group>"; };
+		501C067A2D0C5C1A00E9B45A /* ThermaLib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThermaLib.h; sourceTree = "<group>"; };
+		501C067B2D0C5C1A00E9B45A /* TLConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TLConstants.h; sourceTree = "<group>"; };
+		501C067C2D0C5C1A00E9B45A /* TLDateStamp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TLDateStamp.h; sourceTree = "<group>"; };
+		501C067D2D0C5C1A00E9B45A /* TLDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TLDevice.h; sourceTree = "<group>"; };
+		501C067E2D0C5C1A00E9B45A /* TLRange.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TLRange.h; sourceTree = "<group>"; };
+		501C067F2D0C5C1A00E9B45A /* TLSensor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TLSensor.h; sourceTree = "<group>"; };
+		501C06822D0C5C1A00E9B45A /* libThermaLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libThermaLib.a; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-ThermalibReactNative.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ThermalibReactNative.release.xcconfig"; path = "Target Support Files/Pods-ThermalibReactNative/Pods-ThermalibReactNative.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-ThermalibReactNative-ThermalibReactNativeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ThermalibReactNative-ThermalibReactNativeTests.debug.xcconfig"; path = "Target Support Files/Pods-ThermalibReactNative-ThermalibReactNativeTests/Pods-ThermalibReactNative-ThermalibReactNativeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-ThermalibReactNative.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ThermalibReactNative.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				501C06842D0C5C1A00E9B45A /* libThermaLib.a in Frameworks */,
 				7699B88040F8A987B510C191 /* libPods-ThermalibReactNative-ThermalibReactNativeTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -60,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				501C06852D0C5C1A00E9B45A /* libThermaLib.a in Frameworks */,
 				0C80B921A6F3F58F76C31292 /* libPods-ThermalibReactNative.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -108,9 +120,40 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		501C06802D0C5C1A00E9B45A /* ThermaLib */ = {
+			isa = PBXGroup;
+			children = (
+				501C067A2D0C5C1A00E9B45A /* ThermaLib.h */,
+				501C067B2D0C5C1A00E9B45A /* TLConstants.h */,
+				501C067C2D0C5C1A00E9B45A /* TLDateStamp.h */,
+				501C067D2D0C5C1A00E9B45A /* TLDevice.h */,
+				501C067E2D0C5C1A00E9B45A /* TLRange.h */,
+				501C067F2D0C5C1A00E9B45A /* TLSensor.h */,
+			);
+			path = ThermaLib;
+			sourceTree = "<group>";
+		};
+		501C06812D0C5C1A00E9B45A /* include */ = {
+			isa = PBXGroup;
+			children = (
+				501C06802D0C5C1A00E9B45A /* ThermaLib */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		501C06832D0C5C1A00E9B45A /* ThermaLib */ = {
+			isa = PBXGroup;
+			children = (
+				501C06812D0C5C1A00E9B45A /* include */,
+				501C06822D0C5C1A00E9B45A /* libThermaLib.a */,
+			);
+			path = ThermaLib;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				501C06832D0C5C1A00E9B45A /* ThermaLib */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -245,6 +288,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				62CD2A6CD6317C8B4EC24416 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +470,11 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)/ThermaLib",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -449,6 +498,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)/ThermaLib",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -474,6 +528,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)/ThermaLib",
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
@@ -501,6 +560,11 @@
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = (
+					"$(SDKROOT)/usr/lib/swift",
+					"$(inherited)",
+					"$(PROJECT_DIR)/ThermaLib",
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
@@ -564,7 +628,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -584,7 +648,14 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				USE_HERMES = true;
 			};
 			name = Debug;
 		};
@@ -630,7 +701,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -649,7 +720,13 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					" ",
+				);
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
+				USE_HERMES = true;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

@@ -8,6 +8,7 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -24,6 +25,8 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+
+import ThermaLib from './specs/NativeThermaLibSpec';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -62,6 +65,18 @@ function App(): React.JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const initTherma = async () => {
+    await ThermaLib?.initThermalib();
+  };
+
+  const startScanning = async () => {
+    await ThermaLib?.startScanning();
+  };
+
+  const getDevices = async () => {
+    await ThermaLib?.getDevices();
+  };
+
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
@@ -76,6 +91,11 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
+          <Section title="Native integration">
+            <Button onPress={initTherma} title="Init Therma lib" />
+            <Button onPress={startScanning} title="Start scanning" />
+            <Button onPress={getDevices} title="Get devices" />
+          </Section>
           <Section title="Step One">
             Edit <Text style={styles.highlight}>App.tsx</Text> to change this
             screen and then come back to see your edits.

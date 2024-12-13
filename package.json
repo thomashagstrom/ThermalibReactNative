@@ -4,11 +4,21 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "android:gen": "cd android && ./gradlew generateCodegenArtifactsFromSchema",
     "adb:connect": "adb reverse tcp:8081 tcp:5555",
     "ios": "react-native run-ios",
+    "ios:gen": "cd ios && bundle instalL && bundle expec pod install",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest"
+  },
+  "codegenConfig": {
+    "name": "NativeThermalib",
+    "type": "modules",
+    "jsSrcsDir": "specs",
+    "android": {
+      "javaPackageName": "com.thermalibreactnative"
+    }
   },
   "dependencies": {
     "react": "18.3.1",
