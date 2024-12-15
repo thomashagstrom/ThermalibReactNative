@@ -8,4 +8,5 @@ export interface Spec extends TurboModule {
   startScanning(): Promise<void>;
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>('NativeThermalib');
+// Register with the NAME property specified on native side
+export default TurboModuleRegistry.getEnforcing<Spec>('ThermalibReactNative');
