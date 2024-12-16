@@ -44,29 +44,24 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
         const val NAME = TAG
     }
 
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    override fun initThermalib(promise: Promise?) {
-        sendEvent(
-            "Register callbacks on ${TL}"
-        )
-        TL.registerCallbacks(thermaLibCallbacks, TAG)
-    }
-
     override fun startScanning(promise: Promise?) {
+
+
+        // ThermaLib: start scan for Bluetooth LE devices, with a 5-second timeout.
+        // Completion will be dispatched via tlCallbacks
+        val isConnected =    TL.isServiceConnected(ThermaLib.Transport.BLUETOOTH_LE);
+        if(isConnected === false)
+        {
+            sendEvent("No bluetooth!");
+            return;
+        }
+
         sendEvent(
             "Starting to scan"
         )
 
-        // You can alter how ThermaLib responds to a call to a method that is not applicable to the Device/Sensor for which
-        // it has been called. See the documentation for ThermaLib.UnsupportedCallHandling
-        //
-        TL.unsupportedCallHandling = ThermaLib.UnsupportedCallHandling.LOG
-
-        // ThermaLib: start scan for Bluetooth LE devices, with a 5-second timeout.
-        // Completion will be dispatched via tlCallbacks
         TL.stopScanForDevices()
-        TL.startScanForDevices(ThermaLib.Transport.BLUETOOTH_LE, 15)
+        TL.startScanForDevices(ThermaLib.Transport.BLUETOOTH_LE, 20)
     }
 
     override fun onMessageChanged() {
@@ -81,9 +76,24 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
     }
 
     init {
+        initLib()
+    }
+
+    private fun initLib() {
         context = reactContext
         sendEvent("Init ThermaLib")
+
         TL = ThermaLib.instance(reactContext)
+        // You can alter how ThermaLib responds to a call to a method that is not applicable to the Device/Sensor for which
+        // it has been called. See the documentation for ThermaLib.UnsupportedCallHandling
+        //
+        TL.unsupportedCallHandling = ThermaLib.UnsupportedCallHandling.LOG
+        sendEvent("Supported protocols: ${TL.supportedTransports}")
+        sendEvent(
+            "Register callbacks on ${TL}"
+        )
+
+        TL.registerCallbacks(thermaLibCallbacks, TAG)
     }
 }
 
@@ -94,6 +104,10 @@ val thermaLibCallbacks = object : ThermaLib.ClientCallbacksBase() {
     override fun onScanComplete(
         transport: Int, scanResult: ThermaLib.ScanResult, numDevices: Int, errorMsg: String?
     ) {
+        if(errorMsg !== null){
+            sendEvent(errorMsg)
+        }
+
         if (scanResult == ThermaLib.ScanResult.SUCCESS) {
             sendEvent(
                 "$numDevices found in scan"
@@ -123,5 +137,8 @@ val thermaLibCallbacks = object : ThermaLib.ClientCallbacksBase() {
     }
 
     override fun onDeviceUpdated(device: Device, timestamp: Long) {
+        sendEvent(
+            "Device ${device.identifier} updated"
+        )
     }
 }

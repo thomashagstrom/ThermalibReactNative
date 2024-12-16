@@ -5,7 +5,6 @@ import {ThermDevice} from './ThermalibExpo.types';
 export type onMessageEvent = (msg: unknown) => void;
 
 export interface Spec extends TurboModule {
-  initThermalib(): Promise<void>;
   getDevices(): Promise<Array<ThermDevice[]>>;
   startScanning(): Promise<void>;
   onMessageChanged: () => void;

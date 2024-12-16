@@ -76,7 +76,6 @@ function App(): React.JSX.Element {
 
   const initTherma = async () => {
     await requestBluetoothPermission();
-    await ThermaLib?.initThermalib();
   };
 
   const startScanning = async () => {
@@ -113,7 +112,7 @@ function App(): React.JSX.Element {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <View style={styles.btnContainer}>
-            <Button onPress={initTherma} title="Init Therma lib" />
+            <Button onPress={initTherma} title="Bluetooth" />
             <Button onPress={startScanning} title="Start scanning" />
             <Button onPress={getDevices} title="Get devices" />
           </View>
