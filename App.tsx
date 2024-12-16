@@ -50,13 +50,15 @@ function App(): React.JSX.Element {
   };
 
   const getDevices = async () => {
-    const devs = await NativeModule?.getDevices();
+    const devs = NativeModule?.devices();
     if (devs) {
       console.log('Devices', devs);
     } else {
       console.log('No devices');
+      return;
     }
-    setDevices(devs);
+
+    setDevices(devs.map(d => d as Device));
   };
 
   useEffect(() => {
@@ -64,7 +66,6 @@ function App(): React.JSX.Element {
     var listener = emitter.addListener('onMessageChanged', e => {
       console.log(e);
       setMsg(e.message);
-      getDevices();
     });
     return () => {
       listener.remove();
@@ -99,9 +100,9 @@ function App(): React.JSX.Element {
           <Section title="Devices">
             <ScrollView>
               {devices &&
-                devices.map(dev => (
-                  <Text>
-                    {dev.Identifier} {dev?.description}
+                devices.map((dev, i) => (
+                  <Text key={dev.Identifier + i}>
+                    {dev.Identifier} {dev?.DeviceName}
                   </Text>
                 ))}
             </ScrollView>

@@ -4,18 +4,19 @@ import android.util.Log
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
 import uk.co.etiltd.thermalib.Device
 import uk.co.etiltd.thermalib.ThermaLib
 
 // the ThermaLib devices the master list contains. Filled in by executing a ThermaLib scan for devices
-var devices = arrayOf<Device>()
+var deviceList = arrayOf<Device>()
 
 lateinit var context: ReactApplicationContext
 
 fun refreshDeviceList() {
-    devices = TL.deviceList.toTypedArray()
+    deviceList = TL.deviceList.toTypedArray()
 }
 
 fun sendEvent(msg: String) {
@@ -46,10 +47,10 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
     override fun startScanning(promise: Promise?) {
         // ThermaLib: start scan for Bluetooth LE devices, with a 5-second timeout.
         // Completion will be dispatched via tlCallbacks
-        val isConnected = TL.isServiceConnected(ThermaLib.Transport.BLUETOOTH_LE);
+        val isConnected = TL.isServiceConnected(ThermaLib.Transport.BLUETOOTH_LE)
         if (isConnected === false) {
-            sendEvent("No bluetooth!");
-            return;
+            sendEvent("No bluetooth!")
+            return
         }
 
         sendEvent(
@@ -64,14 +65,18 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
         TODO("Not yet implemented")
     }
 
-    override fun getDevices(promise: Promise?) {
-        refreshDeviceList();
-   
-        if (promise !== null) {
-            return promise.resolve(devices)
-        } else {
-            sendEvent("Nothing to return")
+    override fun devices(): WritableArray? {
+        refreshDeviceList()
+        val map: WritableMap = Arguments.createMap()
+        if(deviceList.isNotEmpty()){
+            val result = Arguments.createArray()
+            for(dev in deviceList){
+                result.pushMap(convertDeviceToWritebleMap(dev))
+            }
+            return result
         }
+
+        return null
     }
 
     init {
@@ -94,6 +99,19 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
 
         TL.registerCallbacks(thermaLibCallbacks, TAG)
     }
+}
+
+private fun convertDeviceToWritebleMap(dev: Device): WritableMap {
+    val map = Arguments.createMap()
+    map.putString("identifier", dev.identifier)
+    map.putString("deviceName", dev.deviceName)
+    map.putString("connectionState", dev.connectionState.toString())
+    map.putString("modelNumber",dev.modelNumber)
+    map.putString("manufacturerName",dev.manufacturerName)
+    map.putInt("batteryLevel",dev.batteryLevel)
+    map.putString("description", dev.description())
+    map.putString("deviceType", dev.deviceType.toString())
+    return map
 }
 
 /**
@@ -141,3 +159,5 @@ val thermaLibCallbacks = object : ThermaLib.ClientCallbacksBase() {
         )
     }
 }
+
+data class NameAndID(val name: String, val id: String)
