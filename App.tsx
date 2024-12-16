@@ -27,10 +27,10 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import {ThermalibModule} from './NativeModule';
 import {requestBluetoothPermission} from './specs';
 import {Section} from './Section';
 import {Device} from './specs/types/Device';
+import NativeModule from './specs/';
 
 function App(): React.JSX.Element {
   const [msg, setMsg] = useState<string>('');
@@ -46,11 +46,11 @@ function App(): React.JSX.Element {
   };
 
   const startScanning = async () => {
-    await ThermalibModule?.startScanning();
+    await NativeModule?.startScanning();
   };
 
   const getDevices = async () => {
-    const devs = await ThermalibModule?.getDevices();
+    const devs = await NativeModule?.getDevices();
     if (devs) {
       console.log('Devices', devs);
     } else {
@@ -88,19 +88,24 @@ function App(): React.JSX.Element {
           <View style={styles.btnContainer}>
             <Button onPress={initTherma} title="Bluetooth" />
             <Button onPress={startScanning} title="Start scanning" />
-            <Button onPress={getDevices} title="Get devices" />
+            <Button
+              onPress={async () => await getDevices()}
+              title="Get devices"
+            />
           </View>
           <Section title="Native">
             <Text>{msg}</Text>
           </Section>
-          <ScrollView>
-            {devices &&
-              devices.map(dev => (
-                <Text>
-                  {dev.Identifier} {dev?.description}
-                </Text>
-              ))}
-          </ScrollView>
+          <Section title="Devices">
+            <ScrollView>
+              {devices &&
+                devices.map(dev => (
+                  <Text>
+                    {dev.Identifier} {dev?.description}
+                  </Text>
+                ))}
+            </ScrollView>
+          </Section>
           <Section title="See Your Changes">
             <ReloadInstructions />
           </Section>
