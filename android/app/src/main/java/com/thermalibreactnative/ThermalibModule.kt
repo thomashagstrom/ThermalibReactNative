@@ -2,7 +2,6 @@ package com.thermalibreactnative
 
 import android.util.Log
 import com.facebook.react.bridge.Arguments
-import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.WritableMap
@@ -23,10 +22,11 @@ fun refreshDeviceList() {
 fun sendEvent(msg: String) {
     Log.d(TAG, msg)
     try {
-        val map:WritableMap = Arguments.createMap()
+        val map: WritableMap = Arguments.createMap()
         map.putString("message", msg)
         context.getJSModule(
-            DeviceEventManagerModule.RCTDeviceEventEmitter::class.java).emit(
+            DeviceEventManagerModule.RCTDeviceEventEmitter::class.java
+        ).emit(
             "onMessageChanged",
             map
         )
