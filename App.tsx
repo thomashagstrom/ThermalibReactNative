@@ -27,7 +27,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import ThermaLib from './specs/NativeThermaLibSpec';
+import {ThermalibModule} from './NativeModule';
 import {requestBluetoothPermission} from './specs';
 import {Section} from './Section';
 import {Device} from './specs/types/Device';
@@ -46,11 +46,16 @@ function App(): React.JSX.Element {
   };
 
   const startScanning = async () => {
-    await ThermaLib?.startScanning();
+    await ThermalibModule?.startScanning();
   };
 
   const getDevices = async () => {
-    const devs = await ThermaLib?.getDevices();
+    const devs = await ThermalibModule?.getDevices();
+    if (devs) {
+      console.log('Devices', devs);
+    } else {
+      console.log('No devices');
+    }
     setDevices(devs);
   };
 
@@ -92,8 +97,7 @@ function App(): React.JSX.Element {
             {devices &&
               devices.map(dev => (
                 <Text>
-                  {dev.getIdentifier && dev.getIdentifier()}{' '}
-                  {dev?.description && dev.description()}
+                  {dev.Identifier} {dev?.description}
                 </Text>
               ))}
           </ScrollView>

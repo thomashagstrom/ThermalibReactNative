@@ -6,89 +6,89 @@ import {Unit} from './Unit';
 export type Device = {
   RSSI_UNAVAIL: number; // Integer.MIN_VALUE equivalent
 
-  getTransportType(): number;
+  TransportType: number;
 
-  getManufacturerName(): string | null;
+  ManufacturerName: string | null;
 
-  getSerialNumber(): string | null;
+  SerialNumber: string | null;
 
-  getModelNumber(): string | null;
+  ModelNumber: string | null;
 
-  getProtocolVersion(): string;
+  ProtocolVersion: string;
 
-  getHardwareRevision(): string;
+  HardwareRevision: string;
 
-  getSoftwareRevision(): string;
+  SoftwareRevision: string;
 
-  getFirmwareRevision(): string | null;
+  FirmwareRevision: string | null;
 
-  getDeviceName(): string;
+  DeviceName: string;
 
   setDeviceName(name: string): void;
 
   /**
    * @deprecated
    */
-  getDeviceAddress(): string;
+  DeviceAddress: string;
 
-  getIdentifier(): string;
+  Identifier: string;
 
-  getConnectionState(): string;
+  ConnectionState: string;
 
-  getBatteryWarningLevel(): string;
+  BatteryWarningLevel: string;
 
-  isConnected(): boolean;
+  isConnected: boolean;
 
-  isReady(): boolean;
+  isReady: boolean;
 
-  getDeviceType(): DeviceType;
+  DeviceType: DeviceType;
 
-  getMaxSensorCount(): number;
+  MaxSensorCount: number;
 
-  getSensors(): Sensor[];
+  Sensors: Sensor[];
 
-  getSensor(index: number): Sensor;
+  Sensor(index: number): Sensor;
 
-  getBatteryLevel(): number;
+  BatteryLevel: number;
 
-  updateRssi(): void;
+  updateRssi: void;
 
-  getRssi(): number;
+  Rssi: number;
 
-  getEmissivity(): number;
+  Emissivity: number;
 
   setEmissivity(emissivity: number): void;
 
   /**
    * @deprecated
    */
-  getUnit(): Unit; // Deprecated
+  Unit: Unit; // Deprecated
 
   /**
    * @deprecated
    */
   setUnit(unit: Unit): void; // Deprecated
 
-  getTemperatureDisplayUnit(): Unit;
+  TemperatureDisplayUnit: Unit;
 
   setTemperatureDisplayUnit(unit: Unit): void;
 
-  getDisplayedUnitForGenericSensorType(genericType: GenericType): Unit;
+  DisplayedUnitForGenericSensorType(genericType: GenericType): Unit;
 
   setDisplayedUnitForGenericSensorType(
     genericType: GenericType,
     unit: Unit,
   ): void;
 
-  getMeasurementInterval(): number;
+  MeasurementInterval: number;
 
   setMeasurementInterval(interval: number): void;
 
-  getTransmissionInterval(): number;
+  TransmissionInterval: number;
 
   setTransmissionInterval(interval: number): void;
 
-  getAutoOffInterval(): number;
+  AutoOffInterval: number;
 
   setAutoOffInterval(interval: number): void;
 
@@ -100,11 +100,11 @@ export type Device = {
 
   requestConnection(retryCount?: number): void;
 
-  requestDisconnection(): void;
+  requestDisconnection: void;
 
-  description(): string;
+  description: string;
 
-  refresh(): void;
+  refresh: void;
 
   /**
    * @deprecated
@@ -114,30 +114,30 @@ export type Device = {
   /**
    * @deprecated
    */
-  getHighAutoScaleValue(): number; // Deprecated
+  HighAutoScaleValue: number; // Deprecated
 
   /**
    * @deprecated
    */
-  getLowAutoScaleValue(): number; // Deprecated
+  LowAutoScaleValue: number; // Deprecated
 
-  getRemoteSettings(): void;
+  RemoteSettings: void;
 
-  getNextTransmissionTime(): number;
+  NextTransmissionTime: number;
 
-  getLastTransmissionTime(): number;
+  LastTransmissionTime: number;
 
-  getLastSettingsUpdateTime(): number;
+  LastSettingsUpdateTime: number;
 
   setPollInterval(interval: number): void;
 
-  getPollInterval(): number;
+  PollInterval: number;
 
-  getFeatures(): number;
+  Features: number;
 
   hasFeature(feature: number): boolean;
 
-  getAlarmSettingsAreLimits(): boolean;
+  AlarmSettingsAreLimits: boolean;
 
   setAlarmSettingsAreLimits(value: boolean): void;
 };

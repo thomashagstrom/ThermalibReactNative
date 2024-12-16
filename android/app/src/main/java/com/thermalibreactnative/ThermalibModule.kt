@@ -65,7 +65,8 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
     }
 
     override fun getDevices(promise: Promise?) {
-        refreshDeviceList()
+        refreshDeviceList();
+   
         if (promise !== null) {
             return promise.resolve(devices)
         } else {
