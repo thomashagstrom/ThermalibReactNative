@@ -23,7 +23,6 @@ import {
   Colors,
   DebugInstructions,
   Header,
-  LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
@@ -98,14 +97,17 @@ function App(): React.JSX.Element {
             <Text>{msg}</Text>
           </Section>
           <Section title="Devices">
-            <ScrollView>
+            <View style={styles.deviceList}>
               {devices &&
                 devices.map((dev, i) => (
-                  <Text key={dev.Identifier + i}>
-                    {dev.Identifier} {dev?.DeviceName}
+                  <Text
+                    key={
+                      dev.identifier || dev.deviceName || dev.description || i
+                    }>
+                    {dev.identifier} {dev?.deviceName}
                   </Text>
                 ))}
-            </ScrollView>
+            </View>
           </Section>
           <Section title="See Your Changes">
             <ReloadInstructions />
@@ -113,10 +115,6 @@ function App(): React.JSX.Element {
           <Section title="Debug">
             <DebugInstructions />
           </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -136,6 +134,10 @@ export const styles = StyleSheet.create({
     marginTop: 8,
     fontSize: 18,
     fontWeight: '400',
+  },
+  deviceList: {
+    minHeight: 100,
+    gap: 5,
   },
   highlight: {
     fontWeight: '700',

@@ -6,89 +6,89 @@ import {Unit} from './Unit';
 export type Device = {
   RSSI_UNAVAIL: number; // Integer.MIN_VALUE equivalent
 
-  TransportType: number;
+  transportType: number;
 
-  ManufacturerName: string | null;
+  manufacturerName: string | null;
 
-  SerialNumber: string | null;
+  serialNumber: string | null;
 
-  ModelNumber: string | null;
+  modelNumber: string | null;
 
-  ProtocolVersion: string;
+  protocolVersion: string;
 
-  HardwareRevision: string;
+  hardwareRevision: string;
 
-  SoftwareRevision: string;
+  softwareRevision: string;
 
-  FirmwareRevision: string | null;
+  firmwareRevision: string | null;
 
-  DeviceName: string;
+  deviceName: string;
 
   setDeviceName(name: string): void;
 
   /**
    * @deprecated
    */
-  DeviceAddress: string;
+  deviceAddress: string;
 
-  Identifier: string;
+  identifier: string;
 
-  ConnectionState: string;
+  connectionState: string;
 
-  BatteryWarningLevel: string;
+  batteryWarningLevel: string;
 
   isConnected: boolean;
 
   isReady: boolean;
 
-  DeviceType: DeviceType;
+  deviceType: DeviceType;
 
-  MaxSensorCount: number;
+  maxSensorCount: number;
 
-  Sensors: Sensor[];
+  sensors: Sensor[];
 
-  Sensor(index: number): Sensor;
+  sensor(index: number): Sensor;
 
-  BatteryLevel: number;
+  batteryLevel: number;
 
   updateRssi: void;
 
-  Rssi: number;
+  rssi: number;
 
-  Emissivity: number;
+  emissivity: number;
 
   setEmissivity(emissivity: number): void;
 
   /**
    * @deprecated
    */
-  Unit: Unit; // Deprecated
+  unit: Unit; // Deprecated
 
   /**
    * @deprecated
    */
   setUnit(unit: Unit): void; // Deprecated
 
-  TemperatureDisplayUnit: Unit;
+  temperatureDisplayUnit: Unit;
 
   setTemperatureDisplayUnit(unit: Unit): void;
 
-  DisplayedUnitForGenericSensorType(genericType: GenericType): Unit;
+  displayedUnitForGenericSensorType(genericType: GenericType): Unit;
 
   setDisplayedUnitForGenericSensorType(
     genericType: GenericType,
     unit: Unit,
   ): void;
 
-  MeasurementInterval: number;
+  measurementInterval: number;
 
   setMeasurementInterval(interval: number): void;
 
-  TransmissionInterval: number;
+  transmissionInterval: number;
 
   setTransmissionInterval(interval: number): void;
 
-  AutoOffInterval: number;
+  autoOffInterval: number;
 
   setAutoOffInterval(interval: number): void;
 
@@ -114,30 +114,30 @@ export type Device = {
   /**
    * @deprecated
    */
-  HighAutoScaleValue: number; // Deprecated
+  highAutoScaleValue: number; // Deprecated
 
   /**
    * @deprecated
    */
-  LowAutoScaleValue: number; // Deprecated
+  lowAutoScaleValue: number; // Deprecated
 
-  RemoteSettings: void;
+  remoteSettings: void;
 
-  NextTransmissionTime: number;
+  nextTransmissionTime: number;
 
-  LastTransmissionTime: number;
+  lastTransmissionTime: number;
 
-  LastSettingsUpdateTime: number;
+  lastSettingsUpdateTime: number;
 
   setPollInterval(interval: number): void;
 
-  PollInterval: number;
+  pollInterval: number;
 
-  Features: number;
+  features: number;
 
   hasFeature(feature: number): boolean;
 
-  AlarmSettingsAreLimits: boolean;
+  alarmSettingsAreLimits: boolean;
 
   setAlarmSettingsAreLimits(value: boolean): void;
 };
