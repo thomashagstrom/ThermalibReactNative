@@ -16,7 +16,6 @@ lateinit var context: ReactApplicationContext
 
 fun refreshDeviceList() {
     devices = TL.deviceList.toTypedArray()
-    sendEvent("devices are ${devices.count()}")
 }
 
 fun sendEvent(msg: String) {
@@ -45,13 +44,10 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
     }
 
     override fun startScanning(promise: Promise?) {
-
-
         // ThermaLib: start scan for Bluetooth LE devices, with a 5-second timeout.
         // Completion will be dispatched via tlCallbacks
-        val isConnected =    TL.isServiceConnected(ThermaLib.Transport.BLUETOOTH_LE);
-        if(isConnected === false)
-        {
+        val isConnected = TL.isServiceConnected(ThermaLib.Transport.BLUETOOTH_LE);
+        if (isConnected === false) {
             sendEvent("No bluetooth!");
             return;
         }
@@ -70,8 +66,10 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
 
     override fun getDevices(promise: Promise?) {
         refreshDeviceList()
-        if (promise != null) {
+        if (promise !== null) {
             return promise.resolve(devices)
+        } else {
+            sendEvent("Nothing to return")
         }
     }
 
@@ -104,7 +102,7 @@ val thermaLibCallbacks = object : ThermaLib.ClientCallbacksBase() {
     override fun onScanComplete(
         transport: Int, scanResult: ThermaLib.ScanResult, numDevices: Int, errorMsg: String?
     ) {
-        if(errorMsg !== null){
+        if (errorMsg !== null) {
             sendEvent(errorMsg)
         }
 

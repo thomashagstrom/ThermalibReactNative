@@ -2,7 +2,7 @@
 // and on native platforms to ThermalibExpoModule.ts
 import mod from './NativeThermaLibSpec';
 export {mod as thermalib};
-export * from './ThermalibExpo.types';
+export type {Device} from './types/';
 export * from './requestBluetoothPermission';
 
 export default mod;

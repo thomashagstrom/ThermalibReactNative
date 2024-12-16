@@ -6,7 +6,6 @@
  */
 
 import React, {useEffect, useState} from 'react';
-import type {PropsWithChildren} from 'react';
 import {
   Button,
   SafeAreaView,
@@ -30,45 +29,13 @@ import {
 
 import ThermaLib from './specs/NativeThermaLibSpec';
 import {requestBluetoothPermission} from './specs';
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-  vertical?: boolean;
-}>;
-
-function Section({children, title, vertical}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View
-      style={
-        (styles.sectionContainer,
-        vertical === true ? {flexDirection: 'row'} : {})
-      }>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+import {Section} from './Section';
+import {Device} from './specs/types/Device';
 
 function App(): React.JSX.Element {
   const [msg, setMsg] = useState<string>('');
   const isDarkMode = useColorScheme() === 'dark';
+  const [devices, setDevices] = useState<Device[]>([]);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -83,7 +50,8 @@ function App(): React.JSX.Element {
   };
 
   const getDevices = async () => {
-    await ThermaLib?.getDevices();
+    const devs = await ThermaLib?.getDevices();
+    setDevices(devs);
   };
 
   useEffect(() => {
@@ -91,6 +59,7 @@ function App(): React.JSX.Element {
     var listener = emitter.addListener('onMessageChanged', e => {
       console.log(e);
       setMsg(e.message);
+      getDevices();
     });
     return () => {
       listener.remove();
@@ -119,6 +88,15 @@ function App(): React.JSX.Element {
           <Section title="Native">
             <Text>{msg}</Text>
           </Section>
+          <ScrollView>
+            {devices &&
+              devices.map(dev => (
+                <Text>
+                  {dev.getIdentifier && dev.getIdentifier()}{' '}
+                  {dev?.description && dev.description()}
+                </Text>
+              ))}
+          </ScrollView>
           <Section title="See Your Changes">
             <ReloadInstructions />
           </Section>
@@ -135,7 +113,7 @@ function App(): React.JSX.Element {
   );
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
