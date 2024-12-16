@@ -1,22 +1,38 @@
 package com.thermalibreactnative
 
 import android.util.Log
+import com.facebook.react.bridge.Arguments
+import com.facebook.react.bridge.Callback
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.WritableMap
+import com.facebook.react.modules.core.DeviceEventManagerModule
 import uk.co.etiltd.thermalib.Device
 import uk.co.etiltd.thermalib.ThermaLib
 
 // the ThermaLib devices the master list contains. Filled in by executing a ThermaLib scan for devices
-
 var devices = arrayOf<Device>()
 
+lateinit var context: ReactApplicationContext
+
 fun refreshDeviceList() {
-    // ThermaLib: illustrates the deviceList attribute
     devices = TL.deviceList.toTypedArray()
+    sendEvent("devices are ${devices.count()}")
 }
 
-fun sendEvent(msg: String, data: Any) {
-    Log.d(TAG, msg + data)
+fun sendEvent(msg: String) {
+    Log.d(TAG, msg)
+    try {
+        val map:WritableMap = Arguments.createMap()
+        map.putString("message", msg)
+        context.getJSModule(
+            DeviceEventManagerModule.RCTDeviceEventEmitter::class.java).emit(
+            "onMessageChanged",
+            map
+        )
+    } catch (ex: Exception) {
+        ex.message?.let { Log.d(TAG, it) }
+    }
 }
 
 class ThermalibModule(private val reactContext: ReactApplicationContext) :
@@ -28,60 +44,19 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
         const val NAME = TAG
     }
 
-    // It's a Bluetooth app, so FINE_LOCATION permission is required. See permissions() below
-    private val MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1
-
-    // the ThermaLib devices the master list contains. Filled in by executing a ThermaLib scan for devices
-    // private var devices = arrayOf<Device>()
-
-    // Defines event names that the module can send to JavaScript.
-    //Events("onChange")
-
     // Defines a JavaScript function that always returns a Promise and whose native code
     // is by default dispatched on the different thread than the JavaScript runtime runs on.
     override fun initThermalib(promise: Promise?) {
-        return initThermalibAsync()
+        sendEvent(
+            "Register callbacks on ${TL}"
+        )
+        TL.registerCallbacks(thermaLibCallbacks, TAG)
     }
 
     override fun startScanning(promise: Promise?) {
-        return startScanningAsync()
-    }
-
-    override fun getDevices(promise: Promise?) {
-        refreshDeviceList()
-        if (promise != null) {
-            return promise?.resolve(devices)!!
-        }
-    }
-
-    init {
-        Log.d(TAG, "Init ThermaLib");
-        TL = ThermaLib.instance(reactContext);
-
-        // sendEvent("onChange", mapOf(
-        //   "value" to "Register callbacks"
-        // ))
-
-    }
-    
-    private fun initThermalibAsync() {
-        Log.d(TAG, "Register callbacks");
         sendEvent(
-            "onChange", mapOf(
-                "value" to "Register callbacks on ${TL}"
-            )
+            "Starting to scan"
         )
-        TL.registerCallbacks(thermaLibCallbacks, TAG);
-    }
-
-    private fun startScanningAsync() {
-        sendEvent(
-            "onChange", mapOf(
-                "value" to "Starting to scan"
-            )
-        )
-
-        Log.d(TAG, "Start scanning");
 
         // You can alter how ThermaLib responds to a call to a method that is not applicable to the Device/Sensor for which
         // it has been called. See the documentation for ThermaLib.UnsupportedCallHandling
@@ -90,10 +65,26 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
 
         // ThermaLib: start scan for Bluetooth LE devices, with a 5-second timeout.
         // Completion will be dispatched via tlCallbacks
-        TL.stopScanForDevices();
-        TL.startScanForDevices(ThermaLib.Transport.BLUETOOTH_LE, 15);
+        TL.stopScanForDevices()
+        TL.startScanForDevices(ThermaLib.Transport.BLUETOOTH_LE, 15)
     }
 
+    override fun onMessageChanged() {
+        TODO("Not yet implemented")
+    }
+
+    override fun getDevices(promise: Promise?) {
+        refreshDeviceList()
+        if (promise != null) {
+            return promise.resolve(devices)
+        }
+    }
+
+    init {
+        context = reactContext
+        sendEvent("Init ThermaLib")
+        TL = ThermaLib.instance(reactContext)
+    }
 }
 
 /**
@@ -101,63 +92,36 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
  */
 val thermaLibCallbacks = object : ThermaLib.ClientCallbacksBase() {
     override fun onScanComplete(
-        transport: Int,
-        scanResult: ThermaLib.ScanResult,
-        numDevices: Int,
-        errorMsg: String?
+        transport: Int, scanResult: ThermaLib.ScanResult, numDevices: Int, errorMsg: String?
     ) {
         if (scanResult == ThermaLib.ScanResult.SUCCESS) {
-//                sendEvent(
-//                    "onChange", mapOf(
-//                        "value" to "$numDevices found in scan"
-//                    )
-//                )
+            sendEvent(
+                "$numDevices found in scan"
+            )
 
-            Log.d(TAG, "$numDevices found in scan")
             refreshDeviceList()
         } else {
-//                sendEvent(
-//                    "onChange",
-//                    mapOf(
-//                        "value" to "Scan failed: ${scanResult.desc}"
-//                    )
-//                )
-
-            Log.e(
-                TAG, "Scan failed: ${scanResult.desc}",
-                IllegalStateException("Scan requested when already scanning")
+            sendEvent(
+                "Scan failed: ${scanResult.desc}"
             )
         }
     }
 
     override fun onNewDevice(device: Device, timestamp: Long) {
-        Log.d(TAG, "New device found: ${device.deviceName}");
         sendEvent(
-            "onChange", mapOf(
-                "value" to "New device found: ${device.deviceName}"
-            )
+            "New device found: ${device.deviceName}"
         )
         refreshDeviceList()
     }
 
     override fun onDeviceConnectionStateChanged(
-        device: Device,
-        newState: Device.ConnectionState?,
-        timestamp: Long
+        device: Device, newState: Device.ConnectionState?, timestamp: Long
     ) {
-        Log.d(
-            TAG,
-            "Device ${device.identifier} changed state -> ${device.connectionState.toString()}"
-        )
         sendEvent(
-            "onChange", mapOf(
-                "value" to "Device ${device.identifier} changed state -> ${device.connectionState.toString()}"
-            )
+            "Device ${device.identifier} changed state -> ${device.connectionState}"
         )
-        // instrument_list.adapter?.notifyDataSetChanged()
     }
 
     override fun onDeviceUpdated(device: Device, timestamp: Long) {
-        // instrument_list.adapter?.notifyDataSetChanged()
     }
 }

@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   Button,
@@ -16,6 +16,8 @@ import {
   Text,
   useColorScheme,
   View,
+  NativeEventEmitter,
+  NativeModules,
 } from 'react-native';
 
 import {
@@ -27,15 +29,21 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import ThermaLib from './specs/NativeThermaLibSpec';
+import {requestBluetoothPermission} from './specs';
 
 type SectionProps = PropsWithChildren<{
   title: string;
+  vertical?: boolean;
 }>;
 
-function Section({children, title}: SectionProps): React.JSX.Element {
+function Section({children, title, vertical}: SectionProps): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.sectionContainer}>
+    <View
+      style={
+        (styles.sectionContainer,
+        vertical === true ? {flexDirection: 'row'} : {})
+      }>
       <Text
         style={[
           styles.sectionTitle,
@@ -59,6 +67,7 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 }
 
 function App(): React.JSX.Element {
+  const [msg, setMsg] = useState<string>('');
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -66,6 +75,7 @@ function App(): React.JSX.Element {
   };
 
   const initTherma = async () => {
+    await requestBluetoothPermission();
     await ThermaLib?.initThermalib();
   };
 
@@ -76,6 +86,17 @@ function App(): React.JSX.Element {
   const getDevices = async () => {
     await ThermaLib?.getDevices();
   };
+
+  useEffect(() => {
+    var emitter = new NativeEventEmitter(NativeModules.NativeThermaLib);
+    var listener = emitter.addListener('onMessageChanged', e => {
+      console.log(e);
+      setMsg(e.message);
+    });
+    return () => {
+      listener.remove();
+    };
+  }, []);
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -91,14 +112,13 @@ function App(): React.JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Native integration">
+          <View style={styles.btnContainer}>
             <Button onPress={initTherma} title="Init Therma lib" />
             <Button onPress={startScanning} title="Start scanning" />
             <Button onPress={getDevices} title="Get devices" />
-          </Section>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
+          </View>
+          <Section title="Native">
+            <Text>{msg}</Text>
           </Section>
           <Section title="See Your Changes">
             <ReloadInstructions />
@@ -132,6 +152,10 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  btnContainer: {
+    justifyContent: 'space-evenly',
+    gap: 5,
   },
 });
 
