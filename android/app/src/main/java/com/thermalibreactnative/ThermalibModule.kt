@@ -67,7 +67,6 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
 
     override fun devices(): WritableArray? {
         refreshDeviceList()
-        val map: WritableMap = Arguments.createMap()
         if(deviceList.isNotEmpty()){
             val result = Arguments.createArray()
             for(dev in deviceList){
@@ -159,5 +158,3 @@ val thermaLibCallbacks = object : ThermaLib.ClientCallbacksBase() {
         )
     }
 }
-
-data class NameAndID(val name: String, val id: String)

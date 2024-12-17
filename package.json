@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "react-native run-android --no-packager",
     "android:gen": "cd android && ./gradlew generateCodegenArtifactsFromSchema",
+    "android:release": "react-native run-android --mode release --no-packager",
     "adb:connect": "adb reverse tcp:8081 tcp:5555",
     "ios": "react-native run-ios",
     "ios:gen": "cd ios && bundle instalL && bundle expec pod install",
