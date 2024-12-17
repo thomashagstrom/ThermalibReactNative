@@ -7,34 +7,37 @@
 
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   Button,
+  FlatList,
+  NativeEventEmitter,
+  NativeModules,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   useColorScheme,
   View,
-  NativeEventEmitter,
-  NativeModules,
 } from 'react-native';
 
 import {
   Colors,
   DebugInstructions,
-  Header,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import {requestBluetoothPermission} from './specs';
 import {Section} from './Section';
-import {Device} from './specs/types/Device';
+import {requestBluetoothPermission} from './specs';
 import NativeModule from './specs/';
+import {Device} from './specs/types/Device';
 
 function App(): React.JSX.Element {
   const [msg, setMsg] = useState<string>('');
   const isDarkMode = useColorScheme() === 'dark';
   const [devices, setDevices] = useState<Device[]>([]);
+  const [selectedDev, setSelectedDev] = useState<Device | undefined>(undefined);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -60,6 +63,15 @@ function App(): React.JSX.Element {
     setDevices(devs.map(d => d as Device));
   };
 
+  const selectDevice = (deviceId: string) => {
+    console.log('Fetch device', deviceId);
+    const dev: Device | undefined = NativeModule.readDevice(deviceId) as Device;
+    if (dev?.deviceName) {
+      setSelectedDev(dev);
+      Alert.alert('Selected device', dev.deviceName);
+    }
+  };
+
   useEffect(() => {
     var emitter = new NativeEventEmitter(NativeModules.NativeThermaLib);
     var listener = emitter.addListener('onMessageChanged', e => {
@@ -77,14 +89,11 @@ function App(): React.JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
+      <View
+        style={{
+          backgroundColor: isDarkMode ? Colors.black : Colors.white,
+        }}>
+        <Section title="Thermalib">
           <View style={styles.btnContainer}>
             <Button onPress={initTherma} title="Bluetooth" />
             <Button onPress={startScanning} title="Start scanning" />
@@ -93,30 +102,40 @@ function App(): React.JSX.Element {
               title="Get devices"
             />
           </View>
-          <Section title="Native">
-            <Text>{msg}</Text>
-          </Section>
-          <Section title="Devices">
-            <View style={styles.deviceList}>
-              {devices &&
-                devices.map((dev, i) => (
-                  <Text
-                    key={
-                      dev.identifier || dev.deviceName || dev.description || i
-                    }>
-                    {dev.identifier} {dev?.deviceName}
-                  </Text>
-                ))}
-            </View>
-          </Section>
+        </Section>
+        <Section title="Native">
+          <Text>{msg}</Text>
+          <Text style={styles.device}>{selectedDev?.deviceName}</Text>
+        </Section>
+        <Section title="Devices">
+          <FlatList
+            style={styles.deviceList}
+            data={devices}
+            keyExtractor={i => i.identifier}
+            renderItem={li => (
+              <TouchableOpacity
+                onPress={() => selectDevice(li.item.identifier)}>
+                <Text
+                  key={
+                    li.item.identifier ||
+                    li.item.deviceName ||
+                    li.item.description
+                  }>
+                  {li.item.identifier} {li.item.deviceName}
+                </Text>
+              </TouchableOpacity>
+            )}
+          />
+        </Section>
+        <ScrollView style={[backgroundStyle, styles.instructions]}>
           <Section title="See Your Changes">
             <ReloadInstructions />
           </Section>
           <Section title="Debug">
             <DebugInstructions />
           </Section>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -143,8 +162,16 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
   },
   btnContainer: {
-    justifyContent: 'space-evenly',
     gap: 5,
+    flexDirection: 'row',
+  },
+  device: {
+    fontWeight: 500,
+    fontStyle: 'italic',
+  },
+  instructions: {
+    flexShrink: 1,
+    maxHeight: 500,
   },
 });
 

@@ -3,6 +3,11 @@ import {GenericType} from './GenericType';
 import {Sensor} from './Sensor';
 import {Unit} from './Unit';
 
+/**
+ * Describes a Thermalib BLE device.
+ * @typedef Device
+ * @type {Object}
+ */
 export type Device = {
   RSSI_UNAVAIL: number; // Integer.MIN_VALUE equivalent
 

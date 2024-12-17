@@ -65,6 +65,22 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
         TODO("Not yet implemented")
     }
 
+    override fun readDevice(deviceId: String?): WritableMap {
+        val result = Arguments.createMap();
+        if(deviceId == null || deviceList.isEmpty()){
+            sendEvent("Specify device id")
+            return result;
+        }
+
+        val foundDev:Device? = TL.getDeviceWithIdentifierAndTransport(deviceId, ThermaLib.Transport.BLUETOOTH_LE)
+        if(foundDev != null){
+            result.putMap("device", convertDeviceToWritebleMap(foundDev))
+        }
+        sendEvent("Found no match for $deviceId")
+
+        return result
+    }
+
     override fun devices(): WritableArray? {
         refreshDeviceList()
         if(deviceList.isNotEmpty()){
