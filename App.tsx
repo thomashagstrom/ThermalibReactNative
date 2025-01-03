@@ -65,10 +65,10 @@ function App(): React.JSX.Element {
 
   const selectDevice = (deviceId: string) => {
     console.log('Fetch device', deviceId);
-    const dev: Device | undefined = NativeModule.readDevice(deviceId) as Device;
-    if (dev?.deviceName) {
-      setSelectedDev(dev);
-      Alert.alert('Selected device', dev.deviceName);
+    const dev = NativeModule.readDevice(deviceId) as {device?: Device};
+    if (dev?.device?.deviceName) {
+      setSelectedDev(dev.device);
+      Alert.alert('Selected device', dev.device.deviceName);
     }
   };
 
@@ -77,6 +77,7 @@ function App(): React.JSX.Element {
     var listener = emitter.addListener('onMessageChanged', e => {
       console.log(e);
       setMsg(e.message);
+      getDevices();
     });
     return () => {
       listener.remove();
@@ -115,14 +116,16 @@ function App(): React.JSX.Element {
             renderItem={li => (
               <TouchableOpacity
                 onPress={() => selectDevice(li.item.identifier)}>
-                <Text
-                  key={
-                    li.item.identifier ||
-                    li.item.deviceName ||
-                    li.item.description
-                  }>
-                  {li.item.identifier} {li.item.deviceName}
-                </Text>
+                <View style={styles.deviceView}>
+                  <Text
+                    key={
+                      li.item.identifier ||
+                      li.item.deviceName ||
+                      li.item.description
+                    }>
+                    {li.item.identifier} {li.item.deviceName}
+                  </Text>
+                </View>
               </TouchableOpacity>
             )}
           />
@@ -172,6 +175,14 @@ export const styles = StyleSheet.create({
   instructions: {
     flexShrink: 1,
     maxHeight: 500,
+  },
+  deviceView: {
+    minHeight: 15,
+    marginVertical: 5,
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
   },
 });
 

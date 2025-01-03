@@ -72,11 +72,13 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
             return result;
         }
 
-        val foundDev:Device? = TL.getDeviceWithIdentifierAndTransport(deviceId, ThermaLib.Transport.BLUETOOTH_LE)
+        val foundDev:Device? = deviceList.find { it.identifier == deviceId }
+
         if(foundDev != null){
             result.putMap("device", convertDeviceToWritebleMap(foundDev))
+        } else {
+            sendEvent("Found no match for $deviceId")
         }
-        sendEvent("Found no match for $deviceId")
 
         return result
     }
