@@ -120,9 +120,15 @@ function App(): React.JSX.Element {
           </View>
         </Section>
         <Section title="Native">
-          <Text>{msg}</Text>
-          <Text style={styles.device}>{selectedDev?.deviceName}</Text>
-          {reading && <Text>Reading: {reading}</Text>}
+          <View style={styles.btnContainer}>
+            <Text>{msg}</Text>
+            <Text style={styles.device}>{selectedDev?.deviceName}</Text>
+            {reading && (
+              <View style={styles.temperatureView}>
+                <Text style={styles.temperatureText}>Reading: {reading}</Text>
+              </View>
+            )}
+          </View>
         </Section>
         <Section title="Devices">
           <FlatList
@@ -202,6 +208,21 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     alignContent: 'center',
     justifyContent: 'center',
+  },
+  temperatureView: {
+    minHeight: 15,
+    marginVertical: 5,
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#981435',
+    padding: 6,
+  },
+  temperatureText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
   },
 });
 
