@@ -15,6 +15,8 @@ export interface Spec extends TurboModule {
    * @param deviceId ID of the device {@link Device.identifier}
    */
   readDevice(deviceId: string): Object;
+
+  readTemperature(deviceId: string): Object;
 }
 
 // Register with the NAME property specified on native side

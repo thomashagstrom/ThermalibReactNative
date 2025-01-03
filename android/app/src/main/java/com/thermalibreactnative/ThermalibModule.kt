@@ -65,6 +65,32 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
         TODO("Not yet implemented")
     }
 
+    override fun readTemperature(deviceId: String?): WritableMap {
+        val result = Arguments.createMap();
+        // get the device with that ID from ThermaLib, and put its name in the title
+        val device = TL.getDeviceWithIdentifierAndTransport(deviceId!!, ThermaLib.Transport.BLUETOOTH_LE)
+        if(device == null){
+            sendEvent("Found no match for $deviceId")
+            return result
+        }
+
+//        installCommand(device, Device.CommandType.MEASURE)
+//        installCommand(device, Device.CommandType.IDENTIFY)
+
+        if(device.sensors.size == 0 ){
+            sendEvent("Found no sensors on device $deviceId")
+            return result
+        }
+
+        val sensor = device.sensors.first()
+        val reading = sensor.reading
+        sendEvent("Read device. Value: $reading")
+
+        result.putDouble("reading", reading.toDouble())
+
+        return result
+    }
+
     override fun readDevice(deviceId: String?): WritableMap {
         val result = Arguments.createMap();
         if(deviceId == null || deviceList.isEmpty()){
@@ -73,12 +99,15 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
         }
 
         val foundDev:Device? = deviceList.find { it.identifier == deviceId }
-
-        if(foundDev != null){
-            result.putMap("device", convertDeviceToWritebleMap(foundDev))
-        } else {
+        if(foundDev == null){
             sendEvent("Found no match for $deviceId")
+            return result;
         }
+
+        // Connect to the device
+        foundDev.requestConnection()
+
+        result.putMap("device", convertDeviceToWritebleMap(foundDev))
 
         return result
     }
@@ -118,6 +147,12 @@ class ThermalibModule(private val reactContext: ReactApplicationContext) :
     }
 }
 
+
+private fun installCommand(device: Device, commandType:Int) {
+    if( device.isSupportedCommand(commandType)) {
+        device.sendCommand(commandType, null)
+    }
+}
 private fun convertDeviceToWritebleMap(dev: Device): WritableMap {
     val map = Arguments.createMap()
     map.putString("identifier", dev.identifier)

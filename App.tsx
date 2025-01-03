@@ -38,6 +38,7 @@ function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const [devices, setDevices] = useState<Device[]>([]);
   const [selectedDev, setSelectedDev] = useState<Device | undefined>(undefined);
+  const [reading, setReading] = useState<number | undefined>(undefined);
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -49,18 +50,16 @@ function App(): React.JSX.Element {
 
   const startScanning = async () => {
     await NativeModule?.startScanning();
+    getDevices();
   };
 
   const getDevices = async () => {
     const devs = NativeModule?.devices();
     if (devs) {
-      console.log('Devices', devs);
+      setDevices(devs.map(d => d as Device));
     } else {
       console.log('No devices');
-      return;
     }
-
-    setDevices(devs.map(d => d as Device));
   };
 
   const selectDevice = (deviceId: string) => {
@@ -68,16 +67,28 @@ function App(): React.JSX.Element {
     const dev = NativeModule.readDevice(deviceId) as {device?: Device};
     if (dev?.device?.deviceName) {
       setSelectedDev(dev.device);
-      Alert.alert('Selected device', dev.device.deviceName);
     }
   };
+
+  const getTemperature = (deviceId: string) => {
+    console.log('Scan device', deviceId);
+    const read = NativeModule.readTemperature(deviceId) as {
+      reading?: number;
+    };
+    setReading(read.reading);
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      getDevices();
+    }, 3 * 1000);
+  }, []);
 
   useEffect(() => {
     var emitter = new NativeEventEmitter(NativeModules.NativeThermaLib);
     var listener = emitter.addListener('onMessageChanged', e => {
       console.log(e);
       setMsg(e.message);
-      getDevices();
     });
     return () => {
       listener.remove();
@@ -102,11 +113,16 @@ function App(): React.JSX.Element {
               onPress={async () => await getDevices()}
               title="Get devices"
             />
+            <Button
+              title="Get temperature"
+              onPress={() => getTemperature(selectedDev?.identifier || '')}
+            />
           </View>
         </Section>
         <Section title="Native">
           <Text>{msg}</Text>
           <Text style={styles.device}>{selectedDev?.deviceName}</Text>
+          {reading && <Text>Reading: {reading}</Text>}
         </Section>
         <Section title="Devices">
           <FlatList
@@ -165,8 +181,11 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
   },
   btnContainer: {
-    gap: 5,
-    flexDirection: 'row',
+    gap: 10,
+    flexDirection: 'column',
+    alignContent: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
   device: {
     fontWeight: 500,
