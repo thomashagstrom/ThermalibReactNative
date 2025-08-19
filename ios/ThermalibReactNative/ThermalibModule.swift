@@ -41,6 +41,13 @@ class ThermalibModule: RCTEventEmitter {
       deviceList = list
     }
   }
+  
+  private func debugCounts() {
+    let totalBLE = TL.deviceCount(for: .bluetoothLE)        // :contentReference[oaicite:9]{index=9}
+    let connected = TL.deviceCount(for: .connected, transport: .bluetoothLE) // :contentReference[oaicite:10]{index=10}
+    emit("BLE devices (total: \(totalBLE), connected: \(connected))")
+  }
+
 
   // ---- JS-callable API ----
 
@@ -48,6 +55,9 @@ class ThermalibModule: RCTEventEmitter {
   @objc func initThermaLib() {
     // Configure SDK + observers now that the bridge/listeners exist
     TL.setSupportedTransports([NSNumber(value: TLTransport.bluetoothLE.rawValue)])
+
+    emit("ThermaLib version: \(TL.versionNumber())")              // :contentReference[oaicite:11]{index=11}
+    emit("Supported Transports: \(TL.supportedTransports())")      // :contentReference[oaicite:12]{index=12}
 
     NotificationCenter.default.addObserver(
       self,
@@ -70,18 +80,32 @@ class ThermalibModule: RCTEventEmitter {
 
     emit("Init ThermaLib")
   }
+  
+  
 
   @objc func startScanning(_ resolve: RCTPromiseResolveBlock, rejecter reject: RCTPromiseRejectBlock) {
+    // Log status (helps diagnose)
+    emit("BT available: \(TL.isBluetoothAvailable())")
     if !TL.isBluetoothAvailable() {
       emit("No bluetooth!")
       resolve(nil)
       return
     }
+
     emit("Starting to scan")
     TL.stopDeviceScan()
-    TL.startDeviceScan(with: .bluetoothLE)
+    TL.removeAllDevices() // clear stale state (SDK method) :contentReference[oaicite:4]{index=4}
+
+    // Prefer the explicit BLE scan + retrieve iOS-cached connections
+    TL.startDeviceScan(with: .bluetoothLE, retrieveSystemConnections: true) // :contentReference[oaicite:5]{index=5}
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+      self?.debugCounts()
+    }
+
     resolve(nil)
   }
+
 
   @objc func devices() -> [[String: Any]]? {
     refreshDeviceList()
