@@ -5,7 +5,7 @@ let TL = ThermaLib.sharedInstance()!
 
 @objc(ThermalibReactNative)
 class ThermalibModule: RCTEventEmitter {
-    private var deviceList: [TLDevice] = []
+    private var deviceList: [any TLDevice] = []
 
     override init() {
         super.init()
@@ -56,7 +56,7 @@ class ThermalibModule: RCTEventEmitter {
     func readDevice(_ deviceId: String) -> [String: Any] {
         var result: [String: Any] = [:]
         refreshDeviceList()
-        guard let dev = deviceList.first(where: { $0.identifier == deviceId }) else {
+      guard let dev = deviceList.first(where: { $0.deviceIdentifier == deviceId }) else {
             sendEvent("Found no match for \(deviceId)")
             return result
         }
@@ -89,7 +89,7 @@ class ThermalibModule: RCTEventEmitter {
 
     private func convertDevice(_ dev: TLDevice) -> [String: Any] {
         var map: [String: Any] = [:]
-        map["identifier"] = dev.identifier ?? ""
+        map["identifier"] = dev.deviceIdentifier ?? ""
         map["deviceName"] = dev.deviceName ?? ""
         map["connectionState"] = "\(dev.connectionState)"
         map["modelNumber"] = dev.modelNumber ?? ""
@@ -123,7 +123,7 @@ class ThermalibModule: RCTEventEmitter {
 
     @objc private func deviceUpdated(_ notification: Notification) {
         if let device = notification.object as? TLDevice {
-            sendEvent("Device \(device.identifier ?? "") updated")
+            sendEvent("Device \(device.deviceIdentifier ?? "") updated")
         }
     }
 }
