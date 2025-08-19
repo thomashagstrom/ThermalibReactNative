@@ -112,7 +112,7 @@ function App(): React.JSX.Element {
   return (
     <SafeAreaView style={backgroundStyle}>
       <View style={containerStyle}>
-        <Section title="Thermalib">
+        <ScrollView>
           <View style={styles.btnContainer}>
             <Button
               color={buttonColor}
@@ -135,8 +135,6 @@ function App(): React.JSX.Element {
               onPress={() => getTemperature(selectedDev?.identifier || '')}
             />
           </View>
-        </Section>
-        <Section title="Native">
           <View style={styles.btnContainer}>
             <Text>{msg}</Text>
             <Text style={styles.device}>{selectedDev?.deviceName}</Text>
@@ -146,8 +144,6 @@ function App(): React.JSX.Element {
               </View>
             )}
           </View>
-        </Section>
-        <Section title="Devices">
           <FlatList
             style={styles.deviceList}
             data={devices}
@@ -168,14 +164,10 @@ function App(): React.JSX.Element {
               </TouchableOpacity>
             )}
           />
-        </Section>
+        </ScrollView>
         <ScrollView style={[backgroundStyle, styles.instructions]}>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
+          <ReloadInstructions />
+          <DebugInstructions />
         </ScrollView>
       </View>
       <StatusBar
