@@ -7,7 +7,6 @@
 
 import React, {useEffect, useState} from 'react';
 import {
-  Alert,
   Button,
   FlatList,
   NativeEventEmitter,

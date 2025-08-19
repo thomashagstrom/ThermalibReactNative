@@ -16,6 +16,8 @@
 		501C06852D0C5C1A00E9B45A /* libThermaLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 501C06822D0C5C1A00E9B45A /* libThermaLib.a */; };
 		50B027F82E549C63000D2A57 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50B027F72E549C63000D2A57 /* CoreBluetooth.framework */; };
 		50B027FA2E549C6B000D2A57 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50B027F92E549C6B000D2A57 /* CoreLocation.framework */; };
+		50B027FD2E54A9A9000D2A57 /* RCTThermalibReactNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 50B027FC2E54A9A9000D2A57 /* RCTThermalibReactNative.m */; };
+		50B027FE2E54A9A9000D2A57 /* RCTThermalibReactNative.m in Sources */ = {isa = PBXBuildFile; fileRef = 50B027FC2E54A9A9000D2A57 /* RCTThermalibReactNative.m */; };
 		50D4A2B52E2A6B9F00E0BB00 /* ThermalibModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D4A2B32E2A6B9F00E0BB00 /* ThermalibModule.swift */; };
 		62CD2A6CD6317C8B4EC24416 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		7699B88040F8A987B510C191 /* libPods-ThermalibReactNative-ThermalibReactNativeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-ThermalibReactNative-ThermalibReactNativeTests.a */; };
@@ -54,6 +56,7 @@
 		501C06822D0C5C1A00E9B45A /* libThermaLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libThermaLib.a; sourceTree = "<group>"; };
 		50B027F72E549C63000D2A57 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		50B027F92E549C6B000D2A57 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		50B027FC2E54A9A9000D2A57 /* RCTThermalibReactNative.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTThermalibReactNative.m; sourceTree = "<group>"; };
 		50D4A2B32E2A6B9F00E0BB00 /* ThermalibModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ThermalibModule.swift; path = ThermalibReactNative/ThermalibModule.swift; sourceTree = "<group>"; };
 		50D4A2B42E2A6B9F00E0BB00 /* ThermalibReactNative-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "ThermalibReactNative-Bridging-Header.h"; path = "ThermalibReactNative/ThermalibReactNative-Bridging-Header.h"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-ThermalibReactNative.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ThermalibReactNative.release.xcconfig"; path = "Target Support Files/Pods-ThermalibReactNative/Pods-ThermalibReactNative.release.xcconfig"; sourceTree = "<group>"; };
@@ -117,6 +120,7 @@
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
 				50D4A2B32E2A6B9F00E0BB00 /* ThermalibModule.swift */,
 				50D4A2B42E2A6B9F00E0BB00 /* ThermalibReactNative-Bridging-Header.h */,
+				50B027FC2E54A9A9000D2A57 /* RCTThermalibReactNative.m */,
 			);
 			name = ThermalibReactNative;
 			sourceTree = "<group>";
@@ -444,6 +448,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E356F31AD99517003FC87E /* ThermalibReactNativeTests.m in Sources */,
+				50B027FE2E54A9A9000D2A57 /* RCTThermalibReactNative.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,6 +459,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				50D4A2B52E2A6B9F00E0BB00 /* ThermalibModule.swift in Sources */,
+				50B027FD2E54A9A9000D2A57 /* RCTThermalibReactNative.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

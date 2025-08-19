@@ -21,7 +21,10 @@
       "javaPackageName": "com.thermalibreactnative"
     },
     "ios": {
-      "prefix": "THR"
+      "prefix": "THR",
+      "modulesProvider": {
+        "ThermalibReactNative": "ThermalibModule.swift"
+      }
     }
   },
   "dependencies": {
