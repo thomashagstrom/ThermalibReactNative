@@ -41,6 +41,7 @@ function App(): React.JSX.Element {
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    padding: 20,
   };
 
   const initTherma = async () => {
@@ -52,7 +53,7 @@ function App(): React.JSX.Element {
     getDevices();
   };
 
-  const getDevices = async () => {
+  const getDevices = () => {
     const devs = NativeModule?.devices();
     if (devs) {
       setDevices(devs.map(d => d as Device));
@@ -102,25 +103,34 @@ function App(): React.JSX.Element {
     };
   }, []);
 
+  const buttonColor = isDarkMode ? Colors.white : Colors.black;
+  const containerStyle = {
+    backgroundColor: isDarkMode ? Colors.black : Colors.white,
+    padding: 20,
+    gap: 10,
+  };
   return (
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <View
-        style={{
-          backgroundColor: isDarkMode ? Colors.black : Colors.white,
-        }}>
+      <View style={containerStyle}>
         <Section title="Thermalib">
           <View style={styles.btnContainer}>
-            <Button onPress={initTherma} title="Bluetooth" />
-            <Button onPress={startScanning} title="Start scanning" />
             <Button
+              color={buttonColor}
+              onPress={initTherma}
+              title="Bluetooth"
+            />
+            <Button
+              color={buttonColor}
+              onPress={startScanning}
+              title="Start scanning"
+            />
+            <Button
+              color={buttonColor}
               onPress={async () => await getDevices()}
               title="Get devices"
             />
             <Button
+              color={buttonColor}
               title="Get temperature"
               onPress={() => getTemperature(selectedDev?.identifier || '')}
             />
@@ -168,6 +178,10 @@ function App(): React.JSX.Element {
           </Section>
         </ScrollView>
       </View>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
     </SafeAreaView>
   );
 }
