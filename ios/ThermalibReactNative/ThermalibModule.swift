@@ -21,7 +21,7 @@ class ThermalibModule: RCTEventEmitter {
     }
 
     private func refreshDeviceList() {
-        if let list = TL.deviceList() as? [TLDevice] {
+      if let list = TL.deviceList() {
             deviceList = list
         }
     }
@@ -68,11 +68,11 @@ class ThermalibModule: RCTEventEmitter {
     @objc
     func readTemperature(_ deviceId: String) -> [String: Any] {
         var result: [String: Any] = [:]
-        guard let device = TL.device(withIdentifier: deviceId, transport: .bluetoothLE) as? TLDevice else {
+      guard let device = TL.device(withIdentifier: deviceId, transport: .bluetoothLE) else {
             sendEvent("Found no match for \(deviceId)")
             return result
         }
-        guard let first = device.sensors.first as? TLSensor else {
+      guard let first = device.sensors.first else {
             sendEvent("Found no sensors on device \(deviceId)")
             return result
         }
