@@ -7,7 +7,6 @@
 
 import React, {useEffect, useState} from 'react';
 import {
-  Alert,
   Button,
   FlatList,
   NativeEventEmitter,
@@ -42,6 +41,7 @@ function App(): React.JSX.Element {
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    padding: 20,
   };
 
   const initTherma = async () => {
@@ -53,7 +53,7 @@ function App(): React.JSX.Element {
     getDevices();
   };
 
-  const getDevices = async () => {
+  const getDevices = () => {
     const devs = NativeModule?.devices();
     if (devs) {
       setDevices(devs.map(d => d as Device));
@@ -85,41 +85,56 @@ function App(): React.JSX.Element {
   }, []);
 
   useEffect(() => {
-    var emitter = new NativeEventEmitter(NativeModules.NativeThermaLib);
-    var listener = emitter.addListener('onMessageChanged', e => {
+    var emitter = new NativeEventEmitter(NativeModules.ThermalibReactNative);
+    const sub = emitter.addListener('onMessageChanged', (e: any) => {
       console.log(e);
       setMsg(e.message);
     });
+
+    // IMPORTANT: kick off the native side AFTER adding the listener
+    if ((NativeModule as any)?.initThermaLib) {
+      (NativeModule as any).initThermaLib();
+    } else if ((NativeModules as any).ThermalibReactNative?.initThermaLib) {
+      (NativeModules as any).ThermalibReactNative.initThermaLib();
+    }
+
     return () => {
-      listener.remove();
+      sub.remove();
     };
   }, []);
 
+  const buttonColor = isDarkMode ? Colors.white : Colors.black;
+  const containerStyle = {
+    backgroundColor: isDarkMode ? Colors.black : Colors.white,
+    padding: 20,
+    gap: 10,
+  };
   return (
     <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <View
-        style={{
-          backgroundColor: isDarkMode ? Colors.black : Colors.white,
-        }}>
-        <Section title="Thermalib">
+      <View style={containerStyle}>
+        <ScrollView>
           <View style={styles.btnContainer}>
-            <Button onPress={initTherma} title="Bluetooth" />
-            <Button onPress={startScanning} title="Start scanning" />
             <Button
+              color={buttonColor}
+              onPress={initTherma}
+              title="Bluetooth"
+            />
+            <Button
+              color={buttonColor}
+              onPress={startScanning}
+              title="Start scanning"
+            />
+            <Button
+              color={buttonColor}
               onPress={async () => await getDevices()}
               title="Get devices"
             />
             <Button
+              color={buttonColor}
               title="Get temperature"
               onPress={() => getTemperature(selectedDev?.identifier || '')}
             />
           </View>
-        </Section>
-        <Section title="Native">
           <View style={styles.btnContainer}>
             <Text>{msg}</Text>
             <Text style={styles.device}>{selectedDev?.deviceName}</Text>
@@ -129,8 +144,6 @@ function App(): React.JSX.Element {
               </View>
             )}
           </View>
-        </Section>
-        <Section title="Devices">
           <FlatList
             style={styles.deviceList}
             data={devices}
@@ -151,16 +164,16 @@ function App(): React.JSX.Element {
               </TouchableOpacity>
             )}
           />
-        </Section>
+        </ScrollView>
         <ScrollView style={[backgroundStyle, styles.instructions]}>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
+          <ReloadInstructions />
+          <DebugInstructions />
         </ScrollView>
       </View>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
     </SafeAreaView>
   );
 }

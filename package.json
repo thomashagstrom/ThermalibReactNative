@@ -7,18 +7,24 @@
     "android:gen": "cd android && ./gradlew generateCodegenArtifactsFromSchema",
     "android:release": "react-native run-android --mode release --no-packager",
     "adb:connect": "adb reverse tcp:8081 tcp:5555",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --device",
     "ios:gen": "cd ios && bundle install && bundle exec pod install",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest"
   },
   "codegenConfig": {
-    "name": "NativeThermalib",
+    "name": "ThermalibReactNative",
     "type": "modules",
     "jsSrcsDir": "specs",
     "android": {
       "javaPackageName": "com.thermalibreactnative"
+    },
+    "ios": {
+      "prefix": "THR",
+      "modulesProvider": {
+        "ThermalibReactNative": "ThermalibModule.swift"
+      }
     }
   },
   "dependencies": {
