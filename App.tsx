@@ -84,13 +84,21 @@ function App(): React.JSX.Element {
   }, []);
 
   useEffect(() => {
-    var emitter = new NativeEventEmitter(NativeModules.NativeThermaLib);
-    var listener = emitter.addListener('onMessageChanged', e => {
+    var emitter = new NativeEventEmitter(NativeModules.ThermalibReactNative);
+    const sub = emitter.addListener('onMessageChanged', (e: any) => {
       console.log(e);
       setMsg(e.message);
     });
+
+    // IMPORTANT: kick off the native side AFTER adding the listener
+    if ((NativeModule as any)?.initThermaLib) {
+      (NativeModule as any).initThermaLib();
+    } else if ((NativeModules as any).ThermalibReactNative?.initThermaLib) {
+      (NativeModules as any).ThermalibReactNative.initThermaLib();
+    }
+
     return () => {
-      listener.remove();
+      sub.remove();
     };
   }, []);
 
