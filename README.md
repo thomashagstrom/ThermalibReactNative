@@ -1,4 +1,10 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Thermalib RN TurboModule
+
+ETI Bluetherm LE Protocol for React-Native turbo modules.
+
+This is an integration to the thermalib SDK from the company ETI, to read temperature from their theromoter devices, e.g. Thermapen © Blue Theromoter
+
+Implemented cross-platform for iOS and Android.
 
 # Getting Started
 
@@ -64,7 +70,6 @@ To update the iOS and Kotlin code based on this interface, run the respective co
 `npm run android:gen`
 
 `npm run ios:gen`
-
 
 ## Congratulations!
 
