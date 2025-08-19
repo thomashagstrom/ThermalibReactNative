@@ -14,11 +14,14 @@
     "test": "jest"
   },
   "codegenConfig": {
-    "name": "NativeThermalib",
+    "name": "ThermalibReactNative",
     "type": "modules",
     "jsSrcsDir": "specs",
     "android": {
       "javaPackageName": "com.thermalibreactnative"
+    },
+    "ios": {
+      "prefix": "THR"
     }
   },
   "dependencies": {
